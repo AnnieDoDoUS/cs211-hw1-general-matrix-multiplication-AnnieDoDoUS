@@ -139,3 +139,67 @@ $$
 | dgemm3 | 2.558Gflops | 2.663Gflops | 2.147Gflops | 1.923Gflops | 1.923Gflops | 0.942Gflops |
 
 The iterative improvements in register utilization and algorithm optimization from dgemm0 to dgemm3 lead to significant performance gains in floating-point operations, demonstrating the importance of efficient coding practices in high-performance computing.
+
+* Q4 <br>
+Cache lines: 60 <br>
+Line size: 10 doubles <br>
+Total cache size:  60×10=600 doubles <br>
+Total cache size in bytes:  600×8 bytes (since a double is 8 bytes) = 4800 bytes <br>
+
+Reads: <br>
+
+$$
+A = B = C = n^2 = 10^2 = 100
+$$
+
+Cache Misses: <br>
+
+Each access to 
+A and B will be a cache miss for the first access of each element in a row or column, leading to higher misses. <br>
+For C, since we access it in a linear fashion, the cache may keep the previous accesses, resulting in fewer misses. <br>
+
+Overall reads: 100+100+100=300 reads. <br>
+Overall misses: 10+10+10=30 misses. <br>
+Overall miss rate: 30/300=0.1=10%
+
+| Loop Order | # of Reads (A) | # of Misses (A) | # of Reads (B) | # of Misses (B) | # of Reads (C) | # of Misses (C) | Overall Miss Rate |
+|------------|----------------|-----------------|----------------|-----------------|----------------|-----------------|------------------|
+| ijk        | 100            | 10              | 100            | 10              | 100            | 10              | 30%              |
+| ikj        | 100            | 10              | 100            | 10              | 100            | 10              | 30%              |
+| jik        | 100            | 10              | 100            | 10              | 100            | 10              | 30%              |
+| jki        | 100            | 10              | 100            | 10              | 100            | 10              | 30%              |
+| kij        | 100            | 10              | 100            | 10              | 100            | 10              | 30%              |
+| kji        | 100            | 10              | 100            | 10              | 100            | 10              | 30%              |
+
+
+Reads: <br>
+
+$$
+A = B = C = n^2 = 10000^2 = 100,000,000
+$$
+
+Cache Misses: <br>
+
+Each access to 
+A and B will be a cache miss for the first access of each element in a row or column, leading to higher misses. <br>
+For C, since we access it in a linear fashion, the cache may keep the previous accesses, resulting in fewer misses. <br>
+
+Overall reads: 100,000,000+100,000,000+100,000,000=300,000,000 reads. <br>
+Overall misses: 10,000+10,000+10,000=30,000 misses. <br>
+Overall miss rate: 30,000/300,000,000=0.0001=0.01%
+
+| Loop Order | # of Reads (A)  | # of Misses (A)  | # of Reads (B)  | # of Misses (B)  | # of Reads (C)  | # of Misses (C)  | Overall Miss Rate |
+|------------|-----------------|------------------|-----------------|------------------|-----------------|------------------|-------------------|
+| ijk        | 100,000,000     | 10,000           | 100,000,000     | 10,000           | 100,000,000     | 10,000           | 0.01%             |
+| ikj        | 100,000,000     | 10,000           | 100,000,000     | 10,000           | 100,000,000     | 10,000           | 0.01%             |
+| jik        | 100,000,000     | 10,000           | 100,000,000     | 10,000           | 100,000,000     | 10,000           | 0.01%             |
+| jki        | 100,000,000     | 10,000           | 100,000,000     | 10,000           | 100,000,000     | 10,000           | 0.01%             |
+| kij        | 100,000,000     | 10,000           | 100,000,000     | 10,000           | 100,000,000     | 10,000           | 0.01%             |
+| kji        | 100,000,000     | 10,000           | 100,000,000     | 10,000           | 100,000,000     | 10,000           | 0.01%             |
+
+
+
+
+
+
+
