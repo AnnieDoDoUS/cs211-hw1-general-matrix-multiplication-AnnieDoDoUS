@@ -197,9 +197,45 @@ Overall miss rate: 30,000/300,000,000=0.0001=0.01%
 | kij        | 100,000,000     | 10,000           | 100,000,000     | 10,000           | 100,000,000     | 10,000           | 0.01%             |
 | kji        | 100,000,000     | 10,000           | 100,000,000     | 10,000           | 100,000,000     | 10,000           | 0.01%             |
 
+* Q5
+
+Reads: <br>
+
+$$
+A = B = C = n^2 = 10000^2 = 100,000,000
+$$
+
+Cache Misses: <br>
+
+Each access to 
+A and B will be a cache miss for the first access of each element in a row or column, leading to higher misses. <br>
+For C, since we access it in a linear fashion, the cache may keep the previous accesses, resulting in fewer misses. <br>
+
+10000/10×1000=1,000,000 misses.
+
+Overall reads: 100,000,000+100,000,000+100,000,000=300,000,000 reads. <br>
+Overall misses: 1,000,000+1,000,000+1,000,000=3,000,000 misses. <br>
+Overall miss rate: 3,000,000/300,000,000=1% <br>
 
 
-
-
-
-
+Cache Misses for Specific Elements in kji-kji Loop Order: <br>
+  * A[0][0]:
+    * Accesses: Multiple accesses occur throughout the algorithm, but the first time it’s accessed, it will incur a cache miss.
+    * Since kji processes A in block size steps, after the first block load, there won’t be additional misses unless the element is evicted from cache.
+  * A[17][21]:
+    * Accesses: The element lies in the second row and third column of block(2,3).
+    * During the first access, it will miss, but subsequent accesses within the block will hit unless evicted.
+  * B[100][130]:
+    * Accesses: The element lies in block(10,13).
+    * The first access to the block containing A[100][130] will miss, but as long as it stays in cache, further accesses within the block will hit.
+  * B[101][134]:
+    * Accesses: The element lies in block(10,13).
+    * The first access to the block containing A[101][134] will miss, but as long as it stays in cache, further accesses within the block will hit.
+  * C[68][90]:
+    * Accesses: The element lies in block(6,9).
+    * The first access to the block will miss, but as long as it stays in cache, further accesses within the block will hit.
+  * C[2000][1297]:
+    * Accesses: The element lies in block(200,129).
+    * The first access to the block will miss, but as long as it stays in cache, further accesses within the block will hit.
+   
+  
