@@ -16,5 +16,22 @@ void dgemm6_kij(double *C,double *A,double *B,int n)
 void dgemm6_kij2(double *C,double *A,double *B,int n)
 {
    // complete the missing code here
-     
+    int i, ii, j, jj, k, kk;
+    int b = 1;
+    for (k=0; k<n; k+=b) {
+        for (i=0; i<n; i+=b) {
+            for (j=0; j<n; j+=b) {
+                for (kk=k; kk<k+b; kk++) {
+                        for (ii=i; ii<i+b; ii++) {
+                            register double r = C[kk*n+ii];
+                            for (jj=j; jj<j+b; jj++) {
+                                r += A[kk*n+jj] * B[jj*n+ii];
+                            }
+                            C[kk*n+ii] = r;
+                        }
+                }
+            }
+        }
+    }
+
 }
