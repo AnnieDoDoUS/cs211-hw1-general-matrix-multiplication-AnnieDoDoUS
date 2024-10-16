@@ -217,6 +217,14 @@ Overall reads: 100,000,000+100,000,000+100,000,000=300,000,000 reads. <br>
 Overall misses: 1,000,000+1,000,000+1,000,000=3,000,000 misses. <br>
 Overall miss rate: 3,000,000/300,000,000=1% <br>
 
+| Loop Order | # of Reads (A)  | # of Misses (A)  | # of Reads (B)  | # of Misses (B)  | # of Reads (C)  | # of Misses (C)  | Overall Miss Rate |
+|------------|-----------------|------------------|-----------------|------------------|-----------------|------------------|-------------------|
+| ijk-ijk    | 100,000,000     | 1,000,000        | 100,000,000     | 1,000,000        | 100,000,000     | 1,000,000        | 1%                |
+| ikj-ikj    | 100,000,000     | 1,000,000        | 100,000,000     | 1,000,000        | 100,000,000     | 1,000,000        | 1%                |
+| jik-jik    | 100,000,000     | 1,000,000        | 100,000,000     | 1,000,000        | 100,000,000     | 1,000,000        | 1%                |
+| jki-jki    | 100,000,000     | 1,000,000        | 100,000,000     | 1,000,000        | 100,000,000     | 1,000,000        | 1%                |
+| kij-kij    | 100,000,000     | 1,000,000        | 100,000,000     | 1,000,000        | 100,000,000     | 1,000,000        | 1%                |
+| kji-kji    | 100,000,000     | 1,000,000        | 100,000,000     | 1,000,000        | 100,000,000     | 1,000,000        | 1%                |
 
 Cache Misses for Specific Elements in kji-kji Loop Order: <br>
   * A[0][0]:
@@ -238,4 +246,26 @@ Cache Misses for Specific Elements in kji-kji Loop Order: <br>
     * Accesses: The element lies in block(200,129).
     * The first access to the block will miss, but as long as it stays in cache, further accesses within the block will hit.
    
-  
+* Q6 Comaprision between B=1 and B=16 <br>
+|              | B=1            | B=16             | B=32             |
+|--------------|----------------|------------------|------------------|
+| dgemm6_ijk   | 128.988007s     | 119.609518s      | 122.072120s      |
+| dgemm6_ikj   | 128.898859s     | 120.963045s      | 141.959694s      |
+| dgemm6_jik   | 126.398836s     | 143.299494s      | 126.030516s      |
+| dgemm6_jki   | 143.906027s     | 123.782810s      | 120.327437s      |
+| dgemm6_kij   | 135.502527s     | 126.305426s      | 129.727163s      |
+| dgemm6_kji   | 142.615004s     | 136.297260s      | 117.516099s      |
+| dgemm6_ijk2  | 329.795878s     | 26.171977s       | 24.557966s       |
+| dgemm6_ikj2  | 356.067277s     | 25.938468s       | 24.177801s       |
+| dgemm6_jik2  | 306.577190s     | 26.350476s       | 26.291500s       |
+| dgemm6_jki2  | 332.990690s     | 25.964630s       | 24.214335s       |
+| dgemm6_kij2  | 366.695189s     | 25.901513s       | 24.245034s       |
+| dgemm6_kji2  | 316.064129s     | 26.019614s       | 24.207078s       |
+
+
+For the block version, moderate performance improvements are observed as block size increases, but gains are limited due to inefficient cache usage, especially for larger matrices. In addition, cache misses remain higher, resulting in longer execution times compared to the blocked version, especially for larger block sizes. <br>
+
+For the non-block version, significant performance gains are achieved by optimizing cache and register blocking, with dramatic speedups as block size increases from B=1 to B=16. Furthermore, efficient cache utilization greatly reduces memory access times, making the blocked version much faster, with further optimization seen at B=32.
+
+
+
