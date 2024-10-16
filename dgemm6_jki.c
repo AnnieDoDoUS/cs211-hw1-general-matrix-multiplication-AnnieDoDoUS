@@ -17,7 +17,7 @@ void dgemm6_jki2(double *C,double *A,double *B,int n)
 {
     // complete the missing code here
     int i, ii, j, jj, k, kk;
-    int b = 1;
+    int b = 64;
     for (j=0; j<n; j+=b) {
         for (k=0; k<n; k+=b) {
             for (i=0; i<n; i+=b) {
