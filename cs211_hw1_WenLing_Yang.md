@@ -269,4 +269,21 @@ For the block version, moderate performance improvements are observed as block s
 For the non-block version, significant performance gains are achieved by optimizing cache and register blocking, with dramatic speedups as block size increases from B=1 to B=16. Furthermore, efficient cache utilization greatly reduces memory access times, making the blocked version much faster, with further optimization seen at B=32.
 
 
+* Q7 <br>
 
+|              | O0           | O1             | O2          |  O3 |
+|--------------|--------------|------------------|--------|---------|
+|       Time   | 7.185574s | 3.569059s | 3.473685s | 2.983482s |
+
+  * Determine Optimal Cache Block Size: 
+    Choose block sizes that fit well into the CPU cache. 
+    Usually, this will depend on our CPU's L1, L2, or L3 cache sizes.
+
+  * Optimize Register Usage:
+    Use registers to store small portions of the matrix (like in dgemm3) for faster access, while using cache blocking (like in dgemm6_ijk2) for larger chunks.
+
+  * Analyze Different Block Sizes and Register Block Sizes:
+    We can vary the block sizes for both cache and register usage and measure performance.
+
+  * Use Compiler Optimization Flags:
+    Analyze how different optimization levels (-O0, -O1, -O2, -O3) affect performance.
