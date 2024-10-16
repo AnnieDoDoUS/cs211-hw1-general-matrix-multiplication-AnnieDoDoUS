@@ -247,6 +247,7 @@ Cache Misses for Specific Elements in kji-kji Loop Order: <br>
     * The first access to the block will miss, but as long as it stays in cache, further accesses within the block will hit.
    
 * Q6 Comaprision between B=1 and B=16 <br>
+
 |              | B=1            | B=16             | B=32             |
 |--------------|----------------|------------------|------------------|
 | dgemm6_ijk   | 128.988007s     | 119.609518s      | 122.072120s      |
